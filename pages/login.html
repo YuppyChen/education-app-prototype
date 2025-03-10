@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background-color: #fff;
+        }
+        .login-container {
+            padding: 24px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .login-header {
+            margin-top: 60px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            background-color: var(--primary-color);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .login-subtitle {
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+        .login-form {
+            margin-bottom: 24px;
+        }
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 24px;
+        }
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+        .social-login {
+            margin-top: auto;
+            margin-bottom: 40px;
+        }
+        .social-login-title {
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .social-login-title::before, .social-login-title::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+        .social-login-title::before {
+            left: 0;
+        }
+        .social-login-title::after {
+            right: 0;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+        }
+        .social-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .wechat {
+            color: #07C160;
+        }
+        .qq {
+            color: #12B7F5;
+        }
+        .weibo {
+            color: #E6162D;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1 class="login-title">学习助手</h1>
+            <p class="login-subtitle">让学习更简单、更高效</p>
+        </div>
+
+        <div class="login-form">
+            <div class="input-group">
+                <input type="text" class="input-field" placeholder="手机号/用户名">
+            </div>
+            <div class="input-group">
+                <input type="password" class="input-field" placeholder="密码">
+            </div>
+            <div class="login-options">
+                <span>注册账号</span>
+                <span>忘记密码？</span>
+            </div>
+            <a href="home.html" class="login-button">登录</a>
+        </div>
+
+        <div class="social-login">
+            <div class="social-login-title">其他登录方式</div>
+            <div class="social-icons">
+                <div class="social-icon wechat">
+                    <i class="fab fa-weixin"></i>
+                </div>
+                <div class="social-icon qq">
+                    <i class="fab fa-qq"></i>
+                </div>
+                <div class="social-icon weibo">
+                    <i class="fab fa-weibo"></i>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center text-xs text-gray-500 mb-4">登录即表示同意《用户协议》和《隐私政策》</p>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错题本 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .stat-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 0 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+        .subject-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .subject-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--light-color);
+            margin-right: 8px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .subject-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .wrong-question-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .wrong-question-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wrong-question-subject {
+            display: flex;
+            align-items: center;
+        }
+        .subject-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            color: var(--primary-color);
+            font-size: 12px;
+        }
+        .wrong-question-date {
+            color: var(--gray-color);
+            font-size: 12px;
+        }
+        .wrong-question-content {
+            padding: 16px;
+        }
+        .wrong-question-text {
+            margin-bottom: 16px;
+        }
+        .wrong-answer {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+            margin-bottom: 12px;
+        }
+        .wrong-answer-label {
+            color: #f44336;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .correct-answer {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            margin-bottom: 12px;
+        }
+        .correct-answer-label {
+            color: #4caf50;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .wrong-question-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wrong-question-meta {
+            color: var(--gray-color);
+            font-size: 12px;
+        }
+        .wrong-question-actions {
+            display: flex;
+            gap: 16px;
+        }
+        .wrong-question-action {
+            color: var(--gray-color);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .wrong-question-action i {
+            margin-right: 4px;
+        }
+        .mastery-level {
+            display: flex;
+            align-items: center;
+        }
+        .mastery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 2px;
+        }
+        .mastery-dot.filled {
+            background-color: var(--success-color);
+        }
+        .mastery-dot.empty {
+            background-color: var(--border-color);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--gray-color);
+        }
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--border-color);
+        }
+        .empty-state-text {
+            margin-bottom: 16px;
+        }
+        .add-button {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 98;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <a href="home.html"><i class="fas fa-chevron-left"></i></a>
+        </div>
+        <div class="nav-bar-title">错题本</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 统计卡片 -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value">32</div>
+                <div class="stat-label">总错题数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">18</div>
+                <div class="stat-label">已掌握</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">14</div>
+                <div class="stat-label">待复习</div>
+            </div>
+        </div>
+        
+        <!-- 学科标签页 -->
+        <div class="subject-tabs">
+            <div class="subject-tab active">全部</div>
+            <div class="subject-tab">数学</div>
+            <div class="subject-tab">物理</div>
+            <div class="subject-tab">化学</div>
+            <div class="subject-tab">生物</div>
+            <div class="subject-tab">语文</div>
+            <div class="subject-tab">英语</div>
+        </div>
+        
+        <!-- 错题列表 -->
+        <div class="wrong-question-list">
+            <!-- 错题1 -->
+            <div class="wrong-question-card">
+                <div class="wrong-question-header">
+                    <div class="wrong-question-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>数学</span>
+                    </div>
+                    <div class="wrong-question-date">
+                        <span>2023-06-15</span>
+                    </div>
+                </div>
+                <div class="wrong-question-content">
+                    <div class="wrong-question-text">
+                        <p>已知函数f(x)=ln(x+1)，求f'(x)的表达式。</p>
+                    </div>
+                    <div class="wrong-answer">
+                        <div class="wrong-answer-label">我的答案</div>
+                        <p>1/x</p>
+                    </div>
+                    <div class="correct-answer">
+                        <div class="correct-answer-label">正确答案</div>
+                        <p>1/(x+1)</p>
+                    </div>
+                </div>
+                <div class="wrong-question-footer">
+                    <div class="mastery-level">
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                    </div>
+                    <div class="wrong-question-actions">
+                        <div class="wrong-question-action">
+                            <i class="fas fa-check"></i>
+                            <span>标记已掌握</span>
+                        </div>
+                        <div class="wrong-question-action">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>查看解析</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 错题2 -->
+            <div class="wrong-question-card">
+                <div class="wrong-question-header">
+                    <div class="wrong-question-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <span>物理</span>
+                    </div>
+                    <div class="wrong-question-date">
+                        <span>2023-06-14</span>
+                    </div>
+                </div>
+                <div class="wrong-question-content">
+                    <div class="wrong-question-text">
+                        <p>一个质量为m的物体从高度h处自由落下，求落地时的速度。</p>
+                    </div>
+                    <div class="wrong-answer">
+                        <div class="wrong-answer-label">我的答案</div>
+                        <p>v = mgh</p>
+                    </div>
+                    <div class="correct-answer">
+                        <div class="correct-answer-label">正确答案</div>
+                        <p>v = √(2gh)</p>
+                    </div>
+                </div>
+                <div class="wrong-question-footer">
+                    <div class="mastery-level">
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                    </div>
+                    <div class="wrong-question-actions">
+                        <div class="wrong-question-action">
+                            <i class="fas fa-check"></i>
+                            <span>标记已掌握</span>
+                        </div>
+                        <div class="wrong-question-action">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>查看解析</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 错题3 -->
+            <div class="wrong-question-card">
+                <div class="wrong-question-header">
+                    <div class="wrong-question-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <span>化学</span>
+                    </div>
+                    <div class="wrong-question-date">
+                        <span>2023-06-12</span>
+                    </div>
+                </div>
+                <div class="wrong-question-content">
+                    <div class="wrong-question-text">
+                        <p>下列物质中，不能使酸性高锰酸钾溶液褪色的是：</p>
+                    </div>
+                    <div class="wrong-answer">
+                        <div class="wrong-answer-label">我的答案</div>
+                        <p>C. H₂O₂</p>
+                    </div>
+                    <div class="correct-answer">
+                        <div class="correct-answer-label">正确答案</div>
+                        <p>D. H₂SO₄</p>
+                    </div>
+                </div>
+                <div class="wrong-question-footer">
+                    <div class="mastery-level">
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot filled"></div>
+                        <div class="mastery-dot empty"></div>
+                        <div class="mastery-dot empty"></div>
+                    </div>
+                    <div class="wrong-question-actions">
+                        <div class="wrong-question-action">
+                            <i class="fas fa-check"></i>
+                            <span>标记已掌握</span>
+                        </div>
+                        <div class="wrong-question-action">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>查看解析</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加按钮 -->
+        <div class="add-button">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item active">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

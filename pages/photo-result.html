@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目解析 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .question-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .solution-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+        .solution-tab {
+            padding: 12px 16px;
+            font-weight: 500;
+            color: var(--gray-color);
+            position: relative;
+        }
+        .solution-tab.active {
+            color: var(--primary-color);
+        }
+        .solution-tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        .solution-content {
+            margin-bottom: 16px;
+        }
+        .solution-step {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .solution-step:last-child {
+            border-bottom: none;
+        }
+        .step-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .step-content {
+            padding-left: 32px;
+        }
+        .formula {
+            background-color: var(--light-color);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-family: "Times New Roman", serif;
+            text-align: center;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+        }
+        .action-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        .action-button i {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .action-button-text {
+            font-size: 12px;
+        }
+        .related-questions {
+            margin-top: 24px;
+        }
+        .related-question {
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--light-color);
+            margin-bottom: 8px;
+        }
+        .ai-thinking {
+            background-color: #f0f7ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px;
+            margin: 16px 0;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <a href="photo-solve.html"><i class="fas fa-chevron-left"></i></a>
+        </div>
+        <div class="nav-bar-title">题目解析</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-share-alt"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 题目图片 -->
+        <img src="https://images.unsplash.com/photo-1621416953228-87abdbdfcf31?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" class="question-image" alt="题目图片">
+        
+        <!-- 题目文本 -->
+        <div class="card">
+            <div class="card-content">
+                <h3 class="font-bold mb-2">已知函数f(x)=ln(x+1)，求f'(x)的表达式。</h3>
+                <div class="tags">
+                    <span class="tag">高中数学</span>
+                    <span class="tag">导数</span>
+                    <span class="tag">对数函数</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 解题标签页 -->
+        <div class="solution-tabs">
+            <div class="solution-tab active">详细解析</div>
+            <div class="solution-tab">视频讲解</div>
+            <div class="solution-tab">相似题目</div>
+        </div>
+        
+        <!-- 解题内容 -->
+        <div class="solution-content">
+            <div class="ai-thinking">
+                思考过程：对数函数的导数公式为 [ln(u)]' = u'/u，这里 u = x+1，所以需要应用链式法则。
+            </div>
+            
+            <div class="solution-step">
+                <div class="step-title">
+                    <span class="step-number">1</span>
+                    <span>明确题目要求</span>
+                </div>
+                <div class="step-content">
+                    <p>已知函数 f(x) = ln(x+1)，需要求导数 f'(x)。</p>
+                </div>
+            </div>
+            
+            <div class="solution-step">
+                <div class="step-title">
+                    <span class="step-number">2</span>
+                    <span>应用导数公式</span>
+                </div>
+                <div class="step-content">
+                    <p>对于对数函数 ln(u)，其导数为：</p>
+                    <div class="formula">[ln(u)]' = \frac{u'}{u}</div>
+                    <p>在这里，u = x+1，所以 u' = 1</p>
+                </div>
+            </div>
+            
+            <div class="solution-step">
+                <div class="step-title">
+                    <span class="step-number">3</span>
+                    <span>计算结果</span>
+                </div>
+                <div class="step-content">
+                    <p>代入公式：</p>
+                    <div class="formula">f'(x) = [ln(x+1)]' = \frac{1}{x+1}</div>
+                    <p>因此，f'(x) = \frac{1}{x+1}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="action-buttons">
+            <div class="action-button">
+                <i class="far fa-star"></i>
+                <span class="action-button-text">收藏</span>
+            </div>
+            <div class="action-button">
+                <i class="far fa-comment-dots"></i>
+                <span class="action-button-text">提问</span>
+            </div>
+            <div class="action-button">
+                <i class="fas fa-book"></i>
+                <span class="action-button-text">加入错题本</span>
+            </div>
+            <div class="action-button">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span class="action-button-text">找老师</span>
+            </div>
+        </div>
+        
+        <!-- 相关题目 -->
+        <div class="related-questions">
+            <h3 class="font-bold mb-3">相关题目</h3>
+            <div class="related-question">
+                <p>已知函数f(x)=e^x，求f'(x)的表达式。</p>
+            </div>
+            <div class="related-question">
+                <p>已知函数f(x)=ln(2x+3)，求f'(x)的表达式。</p>
+            </div>
+            <div class="related-question">
+                <p>已知函数f(x)=x·ln(x)，求f'(x)的表达式。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item active">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

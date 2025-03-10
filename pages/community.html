@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--light-color);
+            margin-right: 8px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .post-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .post-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 12px;
+        }
+        .post-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .post-info {
+            flex: 1;
+        }
+        .post-author {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+        .post-time {
+            margin-right: 8px;
+        }
+        .post-subject {
+            display: flex;
+            align-items: center;
+        }
+        .post-subject i {
+            margin-right: 4px;
+        }
+        .post-content {
+            padding: 0 16px 16px;
+        }
+        .post-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .post-text {
+            margin-bottom: 12px;
+            color: var(--dark-color);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .post-image img {
+            width: 100%;
+            object-fit: cover;
+        }
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .post-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: var(--light-color);
+            color: var(--gray-color);
+            font-size: 12px;
+        }
+        .post-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .post-action {
+            display: flex;
+            align-items: center;
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .post-action i {
+            margin-right: 4px;
+        }
+        .post-action-count {
+            margin-left: 4px;
+        }
+        .question-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .question-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .question-info {
+            flex: 1;
+        }
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .question-meta {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+        .question-author {
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+        }
+        .question-author-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 4px;
+        }
+        .question-author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .question-time {
+            margin-right: 8px;
+        }
+        .question-subject {
+            display: flex;
+            align-items: center;
+        }
+        .question-subject i {
+            margin-right: 4px;
+        }
+        .question-status {
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-answered {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        .status-unanswered {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+        .question-content {
+            padding: 0 16px 16px;
+        }
+        .question-text {
+            margin-bottom: 12px;
+            color: var(--dark-color);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .question-image {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .question-image img {
+            width: 100%;
+            object-fit: cover;
+        }
+        .question-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+        .question-stats {
+            display: flex;
+            gap: 16px;
+        }
+        .question-stat {
+            display: flex;
+            align-items: center;
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .question-stat i {
+            margin-right: 4px;
+        }
+        .question-action {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .add-button {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 98;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <i class="fas fa-comments text-blue-600"></i>
+        </div>
+        <div class="nav-bar-title">学习社区</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 分类标签页 -->
+        <div class="category-tabs">
+            <div class="category-tab active">推荐</div>
+            <div class="category-tab">问答</div>
+            <div class="category-tab">经验</div>
+            <div class="category-tab">资料</div>
+            <div class="category-tab">考试</div>
+            <div class="category-tab">竞赛</div>
+            <div class="category-tab">留学</div>
+        </div>
+        
+        <!-- 问题卡片 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="question-info">
+                    <div class="question-title">如何理解导数的几何意义？</div>
+                    <div class="question-meta">
+                        <div class="question-author">
+                            <div class="question-author-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="用户头像">
+                            </div>
+                            <span>张同学</span>
+                        </div>
+                        <div class="question-time">2小时前</div>
+                        <div class="question-subject">
+                            <i class="fas fa-calculator"></i>
+                            <span>数学</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-status status-answered">已解答</div>
+            </div>
+            <div class="question-content">
+                <div class="question-text">
+                    <p>我对导数的几何意义有些困惑，特别是切线和曲线的关系。有没有简单直观的方法理解这个概念？最好能有图形解释。</p>
+                </div>
+                <div class="question-image">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="导数问题">
+                </div>
+            </div>
+            <div class="question-footer">
+                <div class="question-stats">
+                    <div class="question-stat">
+                        <i class="far fa-comment"></i>
+                        <span>5回答</span>
+                    </div>
+                    <div class="question-stat">
+                        <i class="far fa-eye"></i>
+                        <span>128浏览</span>
+                    </div>
+                </div>
+                <div class="question-action">查看详情</div>
+            </div>
+        </div>
+        
+        <!-- 帖子卡片 -->
+        <div class="post-card">
+            <div class="post-header">
+                <div class="post-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像">
+                </div>
+                <div class="post-info">
+                    <div class="post-author">李同学</div>
+                    <div class="post-meta">
+                        <div class="post-time">3小时前</div>
+                        <div class="post-subject">
+                            <i class="fas fa-atom"></i>
+                            <span>物理</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-title">分享一个理解电磁感应的小技巧</div>
+                <div class="post-text">
+                    <p>今天物理课上老师教了一个记忆楞次定律的口诀："变化的磁场产生感应电流，感应电流产生的磁场阻碍原磁场的变化"。这个口诀特别好记，分享给大家！</p>
+                </div>
+                <div class="post-image">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="电磁感应">
+                </div>
+                <div class="post-tags">
+                    <div class="post-tag">物理</div>
+                    <div class="post-tag">电磁学</div>
+                    <div class="post-tag">学习技巧</div>
+                </div>
+            </div>
+            <div class="post-footer">
+                <div class="post-action">
+                    <i class="far fa-heart"></i>
+                    <span>点赞</span>
+                    <span class="post-action-count">42</span>
+                </div>
+                <div class="post-action">
+                    <i class="far fa-comment"></i>
+                    <span>评论</span>
+                    <span class="post-action-count">8</span>
+                </div>
+                <div class="post-action">
+                    <i class="far fa-bookmark"></i>
+                    <span>收藏</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 问题卡片 -->
+        <div class="question-card">
+            <div class="question-header">
+                <div class="question-info">
+                    <div class="question-title">求助：化学平衡常数K的计算问题</div>
+                    <div class="question-meta">
+                        <div class="question-author">
+                            <div class="question-author-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="用户头像">
+                            </div>
+                            <span>王同学</span>
+                        </div>
+                        <div class="question-time">5小时前</div>
+                        <div class="question-subject">
+                            <i class="fas fa-flask"></i>
+                            <span>化学</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-status status-unanswered">待解答</div>
+            </div>
+            <div class="question-content">
+                <div class="question-text">
+                    <p>在计算化学平衡常数K时，我总是搞不清楚什么时候用浓度，什么时候用分压。特别是气体反应，更加混淆。有没有简单的规则可以遵循？</p>
+                </div>
+            </div>
+            <div class="question-footer">
+                <div class="question-stats">
+                    <div class="question-stat">
+                        <i class="far fa-comment"></i>
+                        <span>2回答</span>
+                    </div>
+                    <div class="question-stat">
+                        <i class="far fa-eye"></i>
+                        <span>76浏览</span>
+                    </div>
+                </div>
+                <div class="question-action">查看详情</div>
+            </div>
+        </div>
+        
+        <!-- 帖子卡片 -->
+        <div class="post-card">
+            <div class="post-header">
+                <div class="post-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像">
+                </div>
+                <div class="post-info">
+                    <div class="post-author">陈同学</div>
+                    <div class="post-meta">
+                        <div class="post-time">昨天</div>
+                        <div class="post-subject">
+                            <i class="fas fa-book-open"></i>
+                            <span>学习方法</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-title">高效学习的番茄工作法分享</div>
+                <div class="post-text">
+                    <p>最近一直在用番茄工作法学习，效果非常好！基本方法是：25分钟专注学习 + 5分钟休息，连续4个番茄钟后休息15-30分钟。这样既能保持高效率，又不会太累。推荐大家试试！</p>
+                </div>
+                <div class="post-tags">
+                    <div class="post-tag">学习方法</div>
+                    <div class="post-tag">时间管理</div>
+                    <div class="post-tag">效率提升</div>
+                </div>
+            </div>
+            <div class="post-footer">
+                <div class="post-action">
+                    <i class="far fa-heart"></i>
+                    <span>点赞</span>
+                    <span class="post-action-count">86</span>
+                </div>
+                <div class="post-action">
+                    <i class="far fa-comment"></i>
+                    <span>评论</span>
+                    <span class="post-action-count">15</span>
+                </div>
+                <div class="post-action">
+                    <i class="far fa-bookmark"></i>
+                    <span>收藏</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加按钮 -->
+        <div class="add-button">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item active">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线辅导 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .banner {
+            height: 160px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .banner-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+        }
+        .banner-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .banner-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--light-color);
+            margin-right: 8px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .section-more {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .teacher-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .teacher-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .teacher-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .teacher-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 12px;
+        }
+        .teacher-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .teacher-info {
+            flex: 1;
+        }
+        .teacher-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .teacher-subject {
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+        .teacher-rating {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--gray-color);
+            margin-top: 4px;
+        }
+        .teacher-rating i {
+            color: #f9ca24;
+            margin-right: 4px;
+        }
+        .teacher-footer {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .teacher-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .teacher-price-unit {
+            font-size: 12px;
+            color: var(--gray-color);
+        }
+        .teacher-action {
+            padding: 6px 12px;
+            border-radius: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 12px;
+        }
+        .class-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+        }
+        .class-image {
+            height: 120px;
+            overflow: hidden;
+        }
+        .class-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .class-content {
+            padding: 16px;
+        }
+        .class-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .class-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .class-subject {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .class-subject i {
+            margin-right: 4px;
+        }
+        .class-time {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .class-teacher {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .class-teacher-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 8px;
+        }
+        .class-teacher-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .class-teacher-name {
+            font-size: 14px;
+        }
+        .class-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .class-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .class-action {
+            padding: 6px 12px;
+            border-radius: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 12px;
+        }
+        .my-classes {
+            margin-bottom: 24px;
+        }
+        .my-class-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+        }
+        .my-class-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .my-class-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .my-class-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .my-class-content {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .my-class-time {
+            flex: 1;
+        }
+        .my-class-date {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .my-class-hour {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .my-class-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-upcoming {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        .status-live {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+        .status-completed {
+            background-color: #f5f5f5;
+            color: #616161;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <a href="home.html"><i class="fas fa-chevron-left"></i></a>
+        </div>
+        <div class="nav-bar-title">在线辅导</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 横幅 -->
+        <div class="banner">
+            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="在线辅导">
+            <div class="banner-text">
+                <div class="banner-title">一对一专业辅导</div>
+                <div class="banner-subtitle">名师在线，随时答疑解惑</div>
+            </div>
+        </div>
+        
+        <!-- 分类标签页 -->
+        <div class="category-tabs">
+            <div class="category-tab active">全部</div>
+            <div class="category-tab">一对一</div>
+            <div class="category-tab">小班课</div>
+            <div class="category-tab">大班课</div>
+            <div class="category-tab">录播课</div>
+            <div class="category-tab">答疑</div>
+        </div>
+        
+        <!-- 我的课程 -->
+        <div class="my-classes">
+            <div class="section-header">
+                <div class="section-title">我的课程</div>
+                <div class="section-more">查看全部 <i class="fas fa-chevron-right"></i></div>
+            </div>
+            
+            <div class="my-class-card">
+                <div class="my-class-header">
+                    <div class="my-class-title">高中数学一对一辅导</div>
+                    <div class="my-class-info">
+                        <div>王老师</div>
+                        <div>已上课 3/10</div>
+                    </div>
+                </div>
+                <div class="my-class-content">
+                    <div class="my-class-time">
+                        <div class="my-class-date">今天</div>
+                        <div class="my-class-hour">19:00 - 20:30</div>
+                    </div>
+                    <div class="my-class-status status-upcoming">即将开始</div>
+                </div>
+            </div>
+            
+            <div class="my-class-card">
+                <div class="my-class-header">
+                    <div class="my-class-title">高中物理小班课</div>
+                    <div class="my-class-info">
+                        <div>李老师</div>
+                        <div>已上课 5/12</div>
+                    </div>
+                </div>
+                <div class="my-class-content">
+                    <div class="my-class-time">
+                        <div class="my-class-date">明天</div>
+                        <div class="my-class-hour">16:00 - 17:30</div>
+                    </div>
+                    <div class="my-class-status status-upcoming">未开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 推荐老师 -->
+        <div class="recommended-teachers">
+            <div class="section-header">
+                <div class="section-title">推荐老师</div>
+                <div class="section-more">查看全部 <i class="fas fa-chevron-right"></i></div>
+            </div>
+            
+            <div class="teacher-grid">
+                <div class="teacher-card">
+                    <div class="teacher-header">
+                        <div class="teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="王老师">
+                        </div>
+                        <div class="teacher-info">
+                            <div class="teacher-name">王老师</div>
+                            <div class="teacher-subject">数学 | 5年经验</div>
+                            <div class="teacher-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 (328人评价)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teacher-footer">
+                        <div class="teacher-price">
+                            ¥150 <span class="teacher-price-unit">/ 45分钟</span>
+                        </div>
+                        <div class="teacher-action">预约</div>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-header">
+                        <div class="teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="李老师">
+                        </div>
+                        <div class="teacher-info">
+                            <div class="teacher-name">李老师</div>
+                            <div class="teacher-subject">物理 | 7年经验</div>
+                            <div class="teacher-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 (256人评价)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teacher-footer">
+                        <div class="teacher-price">
+                            ¥160 <span class="teacher-price-unit">/ 45分钟</span>
+                        </div>
+                        <div class="teacher-action">预约</div>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-header">
+                        <div class="teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="张老师">
+                        </div>
+                        <div class="teacher-info">
+                            <div class="teacher-name">张老师</div>
+                            <div class="teacher-subject">英语 | 6年经验</div>
+                            <div class="teacher-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 (198人评价)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teacher-footer">
+                        <div class="teacher-price">
+                            ¥140 <span class="teacher-price-unit">/ 45分钟</span>
+                        </div>
+                        <div class="teacher-action">预约</div>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-header">
+                        <div class="teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="陈老师">
+                        </div>
+                        <div class="teacher-info">
+                            <div class="teacher-name">陈老师</div>
+                            <div class="teacher-subject">化学 | 4年经验</div>
+                            <div class="teacher-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.6 (176人评价)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teacher-footer">
+                        <div class="teacher-price">
+                            ¥130 <span class="teacher-price-unit">/ 45分钟</span>
+                        </div>
+                        <div class="teacher-action">预约</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 热门课程 -->
+        <div class="popular-classes">
+            <div class="section-header">
+                <div class="section-title">热门课程</div>
+                <div class="section-more">查看全部 <i class="fas fa-chevron-right"></i></div>
+            </div>
+            
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中数学冲刺班">
+                </div>
+                <div class="class-content">
+                    <div class="class-title">高中数学冲刺班 - 函数与导数专题</div>
+                    <div class="class-info">
+                        <div class="class-subject">
+                            <i class="fas fa-book"></i>
+                            <span>数学</span>
+                        </div>
+                        <div class="class-time">
+                            <i class="far fa-clock"></i>
+                            <span>12课时</span>
+                        </div>
+                    </div>
+                    <div class="class-teacher">
+                        <div class="class-teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="王老师">
+                        </div>
+                        <div class="class-teacher-name">王老师</div>
+                    </div>
+                    <div class="class-footer">
+                        <div class="class-price">¥1280</div>
+                        <div class="class-action">立即报名</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-card">
+                <div class="class-image">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中物理精讲班">
+                </div>
+                <div class="class-content">
+                    <div class="class-title">高中物理精讲班 - 力学与电磁学</div>
+                    <div class="class-info">
+                        <div class="class-subject">
+                            <i class="fas fa-atom"></i>
+                            <span>物理</span>
+                        </div>
+                        <div class="class-time">
+                            <i class="far fa-clock"></i>
+                            <span>16课时</span>
+                        </div>
+                    </div>
+                    <div class="class-teacher">
+                        <div class="class-teacher-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="李老师">
+                        </div>
+                        <div class="class-teacher-name">李老师</div>
+                    </div>
+                    <div class="class-footer">
+                        <div class="class-price">¥1580</div>
+                        <div class="class-action">立即报名</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

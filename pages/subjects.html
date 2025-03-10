@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学科分类 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .grade-selector {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .grade-item {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--light-color);
+            margin-right: 8px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        .grade-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .subject-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .subject-image {
+            height: 100px;
+            overflow: hidden;
+        }
+        .subject-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .subject-content {
+            padding: 12px;
+            background-color: white;
+        }
+        .subject-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+        .subject-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        .subject-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-color);
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        .resource-section {
+            margin-top: 24px;
+        }
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .resource-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .resource-more {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .resource-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .resource-card {
+            width: 160px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            background-color: white;
+        }
+        .resource-image {
+            height: 90px;
+            overflow: hidden;
+        }
+        .resource-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .resource-content {
+            padding: 8px;
+        }
+        .resource-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .resource-meta {
+            color: var(--gray-color);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .resource-meta i {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <i class="fas fa-book text-blue-600"></i>
+        </div>
+        <div class="nav-bar-title">学科资料</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 年级选择器 -->
+        <div class="grade-selector">
+            <div class="grade-item">小学</div>
+            <div class="grade-item">初一</div>
+            <div class="grade-item">初二</div>
+            <div class="grade-item">初三</div>
+            <div class="grade-item active">高一</div>
+            <div class="grade-item">高二</div>
+            <div class="grade-item">高三</div>
+            <div class="grade-item">大学</div>
+        </div>
+        
+        <!-- 学科网格 -->
+        <div class="subject-grid">
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="数学">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>数学</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>32个课程</span>
+                        <span>128个资源</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="物理">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <span>物理</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>28个课程</span>
+                        <span>96个资源</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="化学">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <span>化学</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>24个课程</span>
+                        <span>88个资源</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1423592707957-3b212afa6733?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="生物">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <span>生物</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>20个课程</span>
+                        <span>76个资源</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="语文">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span>语文</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>30个课程</span>
+                        <span>112个资源</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="subject-card">
+                <div class="subject-image">
+                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="英语">
+                </div>
+                <div class="subject-content">
+                    <div class="subject-title">
+                        <div class="subject-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <span>英语</span>
+                    </div>
+                    <div class="subject-info">
+                        <span>26个课程</span>
+                        <span>104个资源</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- 热门资源 -->
+        <div class="resource-section">
+            <div class="resource-header">
+                <div class="resource-title">热门资源</div>
+                <div class="resource-more">查看更多 <i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="resource-list">
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中数学必修一">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中数学必修一</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-download"></i>
+                            <span>3.2万</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中物理力学">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中物理力学</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-download"></i>
+                            <span>2.8万</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中化学元素周期表">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中化学元素周期表</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-download"></i>
+                            <span>2.5万</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中英语语法大全">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中英语语法大全</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-download"></i>
+                            <span>2.3万</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 最新资源 -->
+        <div class="resource-section">
+            <div class="resource-header">
+                <div class="resource-title">最新资源</div>
+                <div class="resource-more">查看更多 <i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="resource-list">
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中数学函数专题">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中数学函数专题</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>2天前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中物理电学">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中物理电学</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>3天前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中化学有机化学">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中化学有机化学</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>4天前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-image">
+                        <img src="https://images.unsplash.com/photo-1423592707957-3b212afa6733?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="高中生物遗传学">
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-name">高中生物遗传学</div>
+                        <div class="resource-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>5天前</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item active">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

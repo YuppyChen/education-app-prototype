@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拍照解题 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .camera-container {
+            position: relative;
+            height: calc(100vh - 154px);
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .camera-preview {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .camera-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+        }
+        .camera-top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .camera-bottom-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 16px 0;
+        }
+        .camera-button {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .camera-button-inner {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+        .camera-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .camera-guide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 60%;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+        .camera-mode-selector {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            padding: 4px;
+        }
+        .camera-mode {
+            padding: 6px 16px;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+        }
+        .camera-mode.active {
+            background-color: white;
+            color: black;
+        }
+        .camera-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+        .camera-flash.active {
+            opacity: 1;
+        }
+        .photo-gallery {
+            display: flex;
+            overflow-x: auto;
+            padding: 8px 0;
+            gap: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .photo-thumbnail {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .photo-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .subject-selector {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 4px 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        .subject-selector i {
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 相机容器 -->
+    <div class="camera-container">
+        <div class="camera-preview">
+            <img src="https://images.unsplash.com/photo-1621416953228-87abdbdfcf31?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="相机预览">
+            
+            <div class="camera-overlay">
+                <div class="camera-top-controls">
+                    <div class="camera-option">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="camera-mode-selector">
+                        <div class="camera-mode">作业</div>
+                        <div class="camera-mode active">题目</div>
+                        <div class="camera-mode">公式</div>
+                    </div>
+                    <div class="camera-option">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                </div>
+                
+                <div class="camera-guide">
+                    将题目放在框内，保持光线充足
+                </div>
+                
+                <div class="camera-bottom-controls">
+                    <div class="subject-selector">
+                        数学 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="camera-button" onclick="simulateCamera()">
+                        <div class="camera-button-inner"></div>
+                    </div>
+                    <div class="photo-gallery">
+                        <div class="photo-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1621416953228-87abdbdfcf31?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="缩略图">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="camera-preview" class="camera-flash"></div>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item active">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

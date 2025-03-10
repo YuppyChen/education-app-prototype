@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习计划 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .plan-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .plan-header-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            transform: translate(30px, -30px);
+        }
+        .plan-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .plan-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .plan-progress {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .plan-progress-bar {
+            flex: 1;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 12px;
+        }
+        .plan-progress-fill {
+            height: 100%;
+            background-color: white;
+            border-radius: 4px;
+            width: 65%;
+        }
+        .plan-progress-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .calendar {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .calendar-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .calendar-nav {
+            display: flex;
+            gap: 8px;
+        }
+        .calendar-nav-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-color);
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 12px;
+            color: var(--gray-color);
+            margin-bottom: 8px;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            position: relative;
+        }
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .calendar-day.completed {
+            color: var(--success-color);
+        }
+        .calendar-day.completed::after {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+        }
+        .calendar-day.planned {
+            color: var(--primary-color);
+        }
+        .calendar-day.planned::after {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+        .task-section {
+            margin-bottom: 24px;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .task-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .task-date {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .task-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .task-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .task-card-subject {
+            display: flex;
+            align-items: center;
+        }
+        .subject-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary-color);
+        }
+        .task-card-time {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        .task-card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .task-card-description {
+            color: var(--gray-color);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .task-card-progress {
+            height: 6px;
+            background-color: var(--light-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .task-card-progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        .task-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .task-card-status {
+            color: var(--gray-color);
+        }
+        .task-card-action {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        .add-button {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 98;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <div class="nav-bar-left">
+            <a href="home.html"><i class="fas fa-chevron-left"></i></a>
+        </div>
+        <div class="nav-bar-title">学习计划</div>
+        <div class="nav-bar-right">
+            <i class="fas fa-ellipsis-h"></i>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <!-- 计划头部 -->
+        <div class="plan-header">
+            <div class="plan-header-bg"></div>
+            <div class="plan-title">高考冲刺计划</div>
+            <div class="plan-subtitle">距离高考还有98天</div>
+            <div class="plan-progress">
+                <div class="plan-progress-bar">
+                    <div class="plan-progress-fill"></div>
+                </div>
+                <div class="plan-progress-text">65%</div>
+            </div>
+        </div>
+        
+        <!-- 日历 -->
+        <div class="calendar">
+            <div class="calendar-header">
+                <div class="calendar-title">2023年6月</div>
+                <div class="calendar-nav">
+                    <div class="calendar-nav-button">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="calendar-nav-button">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="calendar-weekdays">
+                <div>日</div>
+                <div>一</div>
+                <div>二</div>
+                <div>三</div>
+                <div>四</div>
+                <div>五</div>
+                <div>六</div>
+            </div>
+            <div class="calendar-days">
+                <div class="calendar-day other-month">28</div>
+                <div class="calendar-day other-month">29</div>
+                <div class="calendar-day other-month">30</div>
+                <div class="calendar-day other-month">31</div>
+                <div class="calendar-day completed">1</div>
+                <div class="calendar-day completed">2</div>
+                <div class="calendar-day completed">3</div>
+                <div class="calendar-day completed">4</div>
+                <div class="calendar-day completed">5</div>
+                <div class="calendar-day completed">6</div>
+                <div class="calendar-day completed">7</div>
+                <div class="calendar-day completed">8</div>
+                <div class="calendar-day completed">9</div>
+                <div class="calendar-day completed">10</div>
+                <div class="calendar-day completed">11</div>
+                <div class="calendar-day completed">12</div>
+                <div class="calendar-day completed">13</div>
+                <div class="calendar-day completed">14</div>
+                <div class="calendar-day today">15</div>
+                <div class="calendar-day planned">16</div>
+                <div class="calendar-day planned">17</div>
+                <div class="calendar-day planned">18</div>
+                <div class="calendar-day planned">19</div>
+                <div class="calendar-day planned">20</div>
+                <div class="calendar-day planned">21</div>
+                <div class="calendar-day planned">22</div>
+                <div class="calendar-day planned">23</div>
+                <div class="calendar-day planned">24</div>
+                <div class="calendar-day planned">25</div>
+                <div class="calendar-day planned">26</div>
+                <div class="calendar-day planned">27</div>
+                <div class="calendar-day planned">28</div>
+                <div class="calendar-day planned">29</div>
+                <div class="calendar-day planned">30</div>
+                <div class="calendar-day other-month">1</div>
+                <div class="calendar-day other-month">2</div>
+                <div class="calendar-day other-month">3</div>
+                <div class="calendar-day other-month">4</div>
+                <div class="calendar-day other-month">5</div>
+                <div class="calendar-day other-month">6</div>
+                <div class="calendar-day other-month">7</div>
+                <div class="calendar-day other-month">8</div>
+            </div>
+        </div>
+        
+        <!-- 今日任务 -->
+        <div class="task-section">
+            <div class="task-header">
+                <div class="task-title">今日任务</div>
+                <div class="task-date">6月15日 星期四</div>
+            </div>
+            
+            <div class="task-card">
+                <div class="task-card-header">
+                    <div class="task-card-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">数学</div>
+                            <div class="text-xs text-gray-500">必修一</div>
+                        </div>
+                    </div>
+                    <div class="task-card-time">09:00 - 10:30</div>
+                </div>
+                <div class="task-card-title">函数与导数专题复习</div>
+                <div class="task-card-description">完成《高考数学一轮复习》P45-P60，重点掌握导数应用</div>
+                <div class="task-card-progress">
+                    <div class="task-card-progress-fill" style="width: 75%"></div>
+                </div>
+                <div class="task-card-footer">
+                    <div class="task-card-status">已完成 3/4</div>
+                    <div class="task-card-action">继续学习</div>
+                </div>
+            </div>
+            
+            <div class="task-card">
+                <div class="task-card-header">
+                    <div class="task-card-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">物理</div>
+                            <div class="text-xs text-gray-500">选修3-1</div>
+                        </div>
+                    </div>
+                    <div class="task-card-time">13:30 - 15:00</div>
+                </div>
+                <div class="task-card-title">电磁学综合练习</div>
+                <div class="task-card-description">完成《物理竞赛辅导》电磁学章节习题，重点关注电磁感应</div>
+                <div class="task-card-progress">
+                    <div class="task-card-progress-fill" style="width: 30%"></div>
+                </div>
+                <div class="task-card-footer">
+                    <div class="task-card-status">已完成 3/10</div>
+                    <div class="task-card-action">继续学习</div>
+                </div>
+            </div>
+            
+            <div class="task-card">
+                <div class="task-card-header">
+                    <div class="task-card-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">英语</div>
+                            <div class="text-xs text-gray-500">阅读理解</div>
+                        </div>
+                    </div>
+                    <div class="task-card-time">19:00 - 20:30</div>
+                </div>
+                <div class="task-card-title">阅读理解专项训练</div>
+                <div class="task-card-description">完成《英语阅读理解150篇》中的5篇文章，重点练习推理判断题</div>
+                <div class="task-card-progress">
+                    <div class="task-card-progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="task-card-footer">
+                    <div class="task-card-status">未开始</div>
+                    <div class="task-card-action">开始学习</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 明日预览 -->
+        <div class="task-section">
+            <div class="task-header">
+                <div class="task-title">明日预览</div>
+                <div class="task-date">6月16日 星期五</div>
+            </div>
+            
+            <div class="task-card">
+                <div class="task-card-header">
+                    <div class="task-card-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">化学</div>
+                            <div class="text-xs text-gray-500">有机化学</div>
+                        </div>
+                    </div>
+                    <div class="task-card-time">09:00 - 10:30</div>
+                </div>
+                <div class="task-card-title">有机化学反应机理</div>
+                <div class="task-card-description">学习《有机化学基础》第4章，重点掌握加成、消除反应</div>
+            </div>
+            
+            <div class="task-card">
+                <div class="task-card-header">
+                    <div class="task-card-subject">
+                        <div class="subject-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">语文</div>
+                            <div class="text-xs text-gray-500">作文</div>
+                        </div>
+                    </div>
+                    <div class="task-card-time">14:00 - 16:00</div>
+                </div>
+                <div class="task-card-title">议论文写作训练</div>
+                <div class="task-card-description">完成一篇议论文，主题"科技与人文的平衡"，字数800字以上</div>
+            </div>
+        </div>
+        
+        <!-- 添加按钮 -->
+        <div class="add-button">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item active">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 

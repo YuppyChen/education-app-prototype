@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 学习助手</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .profile-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 24px 16px;
+            position: relative;
+        }
+        .profile-header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+        }
+        .profile-user {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid white;
+            margin-right: 16px;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .profile-id {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        .profile-edit {
+            padding: 4px 12px;
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+            display: inline-block;
+        }
+        .profile-stats {
+            display: flex;
+            margin-top: 16px;
+            position: relative;
+        }
+        .profile-stat {
+            flex: 1;
+            text-align: center;
+            padding: 0 8px;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .profile-stat:last-child {
+            border-right: none;
+        }
+        .profile-stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .profile-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .menu-section {
+            margin-bottom: 16px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .menu-header {
+            padding: 12px 16px;
+            font-weight: 600;
+            color: var(--gray-color);
+            font-size: 14px;
+            background-color: var(--light-color);
+        }
+        .menu-item {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: var(--primary-color);
+        }
+        .menu-title {
+            flex: 1;
+            font-size: 16px;
+        }
+        .menu-arrow {
+            color: var(--gray-color);
+        }
+        .badge-new {
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 10px;
+            margin-right: 8px;
+        }
+        .badge-count {
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: var(--light-color);
+            color: var(--gray-color);
+            font-size: 12px;
+        }
+        .vip-card {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .vip-card-bg {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            transform: translate(30px, -30px);
+        }
+        .vip-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .vip-description {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .vip-button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: white;
+            color: #f6d365;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar">
+        <div class="status-bar-left">
+            <span class="status-bar-time">14:30</span>
+        </div>
+        <div class="status-bar-right">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- 个人信息头部 -->
+    <div class="profile-header">
+        <div class="profile-header-bg"></div>
+        <div class="profile-user">
+            <div class="profile-avatar">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="用户头像">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">张同学</div>
+                <div class="profile-id">ID: 12345678</div>
+                <div class="profile-edit">编辑资料</div>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <div class="profile-stat">
+                <div class="profile-stat-value">128</div>
+                <div class="profile-stat-label">学习天数</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">56</div>
+                <div class="profile-stat-label">收藏</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">32</div>
+                <div class="profile-stat-label">关注</div>
+            </div>
+            <div class="profile-stat">
+                <div class="profile-stat-value">18</div>
+                <div class="profile-stat-label">粉丝</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content pb-16">
+        <!-- VIP卡片 -->
+        <div class="vip-card">
+            <div class="vip-card-bg"></div>
+            <div class="vip-title">开通VIP会员</div>
+            <div class="vip-description">解锁全部高级功能，享受专属学习服务</div>
+            <div class="vip-button">立即开通</div>
+        </div>
+        
+        <!-- 学习工具 -->
+        <div class="menu-section">
+            <div class="menu-header">学习工具</div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="menu-title">我的课程</div>
+                <div class="badge-count">3</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="menu-title">我的收藏</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="menu-title">学习记录</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="menu-title">离线缓存</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 账户管理 -->
+        <div class="menu-section">
+            <div class="menu-header">账户管理</div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="menu-title">我的钱包</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="menu-title">我的礼券</div>
+                <div class="badge-count">2</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="menu-title">账号安全</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 其他设置 -->
+        <div class="menu-section">
+            <div class="menu-header">其他设置</div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="menu-title">消息通知</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="menu-title">帮助与反馈</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="menu-title">设置</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="menu-title">关于我们</div>
+                <div class="badge-new">新</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部标签栏 -->
+    <div class="tab-bar">
+        <a href="home.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </a>
+        <a href="subjects.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </a>
+        <a href="photo-solve.html" class="tab-item">
+            <i class="fas fa-camera"></i>
+            <span>拍题</span>
+        </a>
+        <a href="community.html" class="tab-item">
+            <i class="fas fa-comments"></i>
+            <span>社区</span>
+        </a>
+        <a href="profile.html" class="tab-item active">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </a>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html> 
